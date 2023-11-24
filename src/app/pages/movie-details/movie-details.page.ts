@@ -24,8 +24,11 @@ export class MovieDetailsPage implements OnInit {
     } else {
       console.error("No ID found.");
     }
-    
+  }
 
+  openImdb() {
+    // window.open(this.movie.homepage);
+    window.open(`http://imdb.com/title/${this.movie.imdb_id}`);
   }
 
 }
