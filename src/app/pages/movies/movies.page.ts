@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import { InfiniteScrollCustomEvent, LoadingController } from '@ionic/angular';
 import { MovieService } from 'src/app/services/movie.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-movies',
@@ -12,6 +13,7 @@ export class MoviesPage implements OnInit {
   // movies = [];
   movies: any[] = [];
   currentPage = 1;
+  imageBaseUrl = environment.images;
 
   constructor(private movieService: MovieService, private loadingCtrl: LoadingController) { }
 
@@ -19,7 +21,7 @@ export class MoviesPage implements OnInit {
     this.loadMovies();
   }
 
-  async loadMovies() {
+  async loadMovies(event?: InfiniteScrollCustomEvent) {
     const loading = await this.loadingCtrl.create({
       message: "Cargando...",
       spinner: "bubbles",
@@ -30,10 +32,15 @@ export class MoviesPage implements OnInit {
       loading.dismiss();
       this.movies = [...this.movies, ...res.results];
       console.log(res);
+      event?.target.complete();
     });
-  }
+  };
 
-
+  loadMore(event: InfiniteScrollCustomEvent) {
+    this.currentPage++;
+    this.loadMovies(event);
+  };
+ 
 
 
 
